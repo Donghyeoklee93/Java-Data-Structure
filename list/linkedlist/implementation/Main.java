@@ -32,8 +32,37 @@ public class Main {
         System.out.println(numbers.indexOf(5));
         System.out.println(numbers.indexOf(7));
 
+        LinkedList.ListIterator i = numbers.listIterator();
+//        System.out.println(i.next());
+//        System.out.println(i.hasNext());
+//        System.out.println(i.next());
+//        System.out.println(i.next());
+//        System.out.println(i.next());
+//        System.out.println(i.next());
+//        System.out.println(i.hasNext());
 
+//        while(i.hasNext()){
+//            System.out.println(i.next());
+//        }
 
+        i.add(5);
+        i.next();
+        i.add(15);
+
+        System.out.println(numbers);
+
+        numbers.addLast(10);
+        numbers.addLast(15);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        LinkedList.ListIterator li = numbers.listIterator();
+        System.out.println(numbers);
+
+        while(li.hasNext()){
+            if((int)li.next() == 15)
+                li.remove();
+        }
+        System.out.println(numbers);
 
 
     }

@@ -1,26 +1,31 @@
 package list.linkedlist.implementation;
 
+import java.util.ListIterator;
+
 public class LinkedList {
     // 첫번째 노드를 가리키는 필드
     private Node head;
     private Node tail;
     private int size = 0;
-    private class Node{
+
+    private class Node {
         // 데이터가 저장될 필드
         private Object data;
         // 다음 노드를 가리키는 필드
         private Node next;
+
         public Node(Object input) {
             this.data = input;
             this.next = null;
         }
+
         // 노드의 내용을 쉽게 출력해서 확인해볼 수 있는 기능
-        public String toString(){
+        public String toString() {
             return String.valueOf(this.data);
         }
     }
 
-    public void addFirst(Object input){
+    public void addFirst(Object input) {
         // 노드를 생성합니다.
         Node newNode = new Node(input);
         // 새로운 노드의 다음 노드로 해드를 지정합니다.
@@ -28,16 +33,16 @@ public class LinkedList {
         // 헤드로 새로운 노드를 지정합니다.
         head = newNode;
         size++;
-        if(head.next == null){
+        if (head.next == null) {
             tail = head;
         }
     }
 
-    public void addLast(Object input){
+    public void addLast(Object input) {
         // 노드를 생성합니다.
         Node newNode = new Node(input);
         // 리스트의 노드가 없다면 첫번째 노드를 추가하는 메소드를 사용합니다.
-        if(size == 0){
+        if (size == 0) {
             addFirst(input);
         } else {
             // 마지막 노드의 다음 노드로 생성한 노드를 지정합니다.
@@ -56,12 +61,12 @@ public class LinkedList {
         return x;
     }
 
-    public void add(int k, Object input){
+    public void add(int k, Object input) {
         // 만약 k가 0이라면 첫번째 노드에 추가하는 것이기 때문에 addFirst를 사용합니다.
-        if(k == 0){
+        if (k == 0) {
             addFirst(input);
         } else {
-            Node temp1 = node(k-1);
+            Node temp1 = node(k - 1);
             // k 번째 노드를 temp2로 지정합니다.
             Node temp2 = temp1.next;
             // 새로운 노드를 생성합니다.
@@ -72,7 +77,7 @@ public class LinkedList {
             newNode.next = temp2;
             size++;
             // 새로운 노드의 다음 노드가 없다면 새로운 노드가 마지막 노드이기 때문에 tail로 지정합니다.
-            if(newNode.next == null){
+            if (newNode.next == null) {
                 tail = newNode;
             }
         }
@@ -81,7 +86,7 @@ public class LinkedList {
 
     public String toString() {
         // 노드가 없다면 []를 리턴합니다.
-        if(head == null){
+        if (head == null) {
             return "[]";
         }
         // 탐색을 시작합니다.
@@ -89,16 +94,16 @@ public class LinkedList {
         String str = "[";
         // 다음 노드가 없을 때까지 반복문을 실행합니다.
         // 마지막 노드는 다음 노드가 없기 때문에 아래의 구문은 마지막 노드는 제외됩니다.
-        while(temp.next != null){
+        while (temp.next != null) {
             str += temp.data + ",";
             temp = temp.next;
         }
         // 마지막 노드를 출력결과에 포함시킵니다.
         str += temp.data;
-        return str+"]";
+        return str + "]";
     }
 
-    public Object removeFirst(){
+    public Object removeFirst() {
         Node temp = head;
         head = head.next;
         Object returnData = temp.data;
@@ -107,11 +112,11 @@ public class LinkedList {
         return returnData;
     }
 
-    public Object remove(int k){
-        if(k == 0)
+    public Object remove(int k) {
+        if (k == 0)
             return removeFirst();
         // k-1번째 노드를 temp의 값으로 지정합니다.
-        Node temp = node(k-1);
+        Node temp = node(k - 1);
         // 삭제 노드를 todoDeleted에 기록해 둡니다.
         // 삭제 노드를 지금 제거하면 삭제 앞 노드와 삭제 뒤 노드를 연결할 수 없습니다.
         Node todoDeleted = temp.next;
@@ -119,7 +124,7 @@ public class LinkedList {
         temp.next = temp.next.next;
         // 삭제된 데이터를 리턴하기 위해서 returnData에 데이터를 저장합니다.
         Object returnData = todoDeleted.data;
-        if(todoDeleted == tail){
+        if (todoDeleted == tail) {
             tail = temp;
         }
         // cur.next를 삭제 합니다.
@@ -128,30 +133,77 @@ public class LinkedList {
         return returnData;
     }
 
-    public Object removeLast(){
-        return remove(size-1);
+    public Object removeLast() {
+        return remove(size - 1);
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public Object get(int k){
+    public Object get(int k) {
         Node temp = node(k);
         return temp.data;
     }
 
-    public int indexOf(Object data){
+    public int indexOf(Object data) {
         Node temp = head;
         int index = 0;
-        while(temp.data != data){
+        while (temp.data != data) {
             temp = temp.next;
             index++;
-            if(temp == null){
+            if (temp == null) {
                 return -1;
             }
         }
         return index;
     }
 
+    public ListIterator listIterator() {
+        return new ListIterator();
+    }
+
+    public class ListIterator {
+        private Node next;
+        private Node lastReturned;
+        private int nextIndex;
+
+        ListIterator() {
+            next = head;
+        }
+
+        public Object next() {
+            lastReturned = next;
+            next = next.next;
+            nextIndex++;
+            return lastReturned.data;
+        }
+
+        public boolean hasNext() {
+            return nextIndex < size();
+        }
+
+        public void add(Object input) {
+            Node newNode = new Node(input);
+            if (lastReturned == null) {
+                head = newNode;
+                newNode.next = next;
+            } else {
+                lastReturned.next = newNode;
+                newNode.next = next;
+            }
+            lastReturned = newNode;
+            nextIndex++;
+            size++;
+        }
+
+        public void remove(){
+            if(nextIndex == 0){
+                throw new IllegalStateException();
+            }
+            LinkedList.this.remove(nextIndex-1);
+            nextIndex--;
+        }
+
+    }
 }
